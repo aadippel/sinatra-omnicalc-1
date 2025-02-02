@@ -14,9 +14,17 @@ get("/square/new") do
 end
 
 get("/square/results") do
-  @the_num = <%= params.fetch("users_number").to_f %>
+  @the_num = params.fetch("users_number").to_i
 
-  @the_result = @the_num ** 2 # ** is the exponentiation operator
+  @the_result = @the_num.to_f ** 2 # ** is the exponentiation operator
 
   erb(:square_results)
+end
+
+get("/square_root/new") do
+  erb(:new_square_root_calc)
+end
+
+get("/payment/new") do
+  erb(:new_payment_calc)
 end
