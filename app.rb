@@ -39,13 +39,40 @@ get("/payment/new") do
 end
 
 get("/payment/results") do
-  @apr_num = params.fetch("APR").to_fs(:percentage, {:precision => 4})
+  # Step 1: Fetch the APR from params and convert it to a float
+  apr_str = params.fetch("APR")
+  annual_rate = apr_str.to_f
 
-  @years_num = params.fetch("years").to_i
+  # Step 2: Convert the APR from a percentage to a decimal
+  annual_interest_rate = annual_rate / 100
 
-  @principal_num = params.fetch("principal").to_fs(:number, {:precision => 2})
+  # Step 3: Divide by 12 to get the monthly interest rate
+  monthly_interest_rate = annual_interest_rate / 12
 
-  @payment_result = @apr_num * @years_num * @principal_num
+  # Step 4: Fetch the number of years, convert to an integer, and multiply by 12 for monthly periods
+  years_str = params.fetch("years")
+  years = years_str.to_i
+  n = years * 12
+
+  # Step 5: Fetch the principal amount and convert it to a float
+  principal_str = params.fetch("principal")
+  principal_val = principal_str.to_f
+
+  # Step 6: Calculate the numerator and denominator
+  numerator = monthly_interest_rate * principal_val
+  denominator = 1 - ((1 + monthly_interest_rate) ** -n)
+
+  # Step 7: Calculate the monthly payment by dividing the numerator by the denominator
+  monthly_payment = numerator / denominator
+
+  # Format the result as currency
+  @formatted_payment = monthly_payment.to_fs(:currency)
+
+  # The following instance variables are not part of the monthly payment calculation,
+  # but they are used to display the inputs back to the user on the results page.
+  @formatted_apr = annual_interest_rate.to_fs(:percentage, {:precision => 4})
+  @years_num = years
+  @formatted_principal = principal_val.to_fs(:currency)
 
   erb(:payment_results)
 end
