@@ -14,9 +14,9 @@ get("/square/new") do
 end
 
 get("/square/results") do
-  @square_num = params.fetch("square_number").to_i
+  @square_num = params.fetch("square_number").to_f
 
-  @square_result = @square_num.to_f ** 2 
+  @square_result = @square_num ** 2 
   # ** is the exponentiation operator
 
   erb(:square_results)
@@ -27,9 +27,9 @@ get("/square_root/new") do
 end
 
 get("/square_root/results") do
-  @square_root_num = params.fetch("users_number").to_i
+  @square_root_num = params.fetch("users_num").to_f
 
-  @square_result = Math.sqrt(@square_root_num).to_f
+  @square_root_result = Math.sqrt(@square_root_num)
 
   erb(:square_root_results)
 end
@@ -70,7 +70,7 @@ get("/payment/results") do
 
   # The following instance variables are not part of the monthly payment calculation,
   # but they are used to display the inputs back to the user on the results page.
-  @formatted_apr = annual_interest_rate.to_fs(:percentage, {:precision => 4})
+  @formatted_apr = annual_interest_rate.round(5).to_s + "%"
   @years_num = years
   @formatted_principal = principal_val.to_fs(:currency)
 
