@@ -1,13 +1,13 @@
 require "sinatra"
 require "sinatra/reloader"
 
-get("/howdy") do
-  erb(:hello)
-end
+# get("/howdy") do
+#  erb(:hello)
+# end
 
-get("/goodbye") do
-  erb(:bye)
-end
+# get("/goodbye") do
+#  erb(:bye)
+# end
 
 get("/square/new") do
   erb(:new_square_calc)
@@ -18,5 +18,5 @@ get("/square/results") do
 
   @the_result = @the_num ** 2 # ** is the exponentiation operator
 
-  erb(square_results)
+  erb(:square_results)
 end
