@@ -14,9 +14,10 @@ get("/square/new") do
 end
 
 get("/square/results") do
-  @square_num = params.fetch("users_number").to_i
+  @square_num = params.fetch("square_number").to_i
 
-  @square_result = @square_num.to_f ** 2 # ** is the exponentiation operator
+  @square_result = @square_num.to_f ** 2 
+  # ** is the exponentiation operator
 
   erb(:square_results)
 end
@@ -26,7 +27,7 @@ get("/square_root/new") do
 end
 
 get("/square_root/results") do
-  @square_root_num = params.fetch("users_number").to_i #correct
+  @square_root_num = params.fetch("users_number").to_i
 
   @square_result = Math.sqrt(@square_root_num).to_f
 
@@ -38,13 +39,15 @@ get("/payment/new") do
 end
 
 get("/payment/results") do
-  @apr_num = @apr_num..to_fs(:percentage, {:precision => 4}) #correct
+  @apr_num = params.fetch("APR").to_fs(:percentage, {:precision => 4})
 
-  @years_num = @years_num.to_i #correct
+  @years_num = params.fetch("years").to_i
 
-  @principal_num = @principal_num.to_fs #correct
+  @principal_num = params.fetch("principal").to_fs(:number, {:precision => 2})
 
-  erb(:square_root_results)
+  @payment_result = @apr_num * @years_num * @principal_num
+
+  erb(:payment_results)
 end
 
 get("/random/new") do
@@ -52,11 +55,21 @@ get("/random/new") do
 end
 
 get("/random/results") do
-  @minimum_num = @minimum_num.to_f #correct
+  @minimum_num = params.fetch("minimum").to_f
 
-  @maximum_num = @maximum_num.to_f #correct
+  @maximum_num = params.fetch("maximum").to_f
 
-  @random_result = rand(@minimum_num..@maximum_num).to_fs(:precision => 15) #correct
+  @random_result = rand(@minimum_num.to_f..@maximum_num.to_f).round(15)
 
   erb(:random_results)
 end
+
+# params.inspect code:
+
+# get("/random/results") do
+#   # Inspect the params hash and print it to the server logs for debugging
+#   puts "Params: #{params.inspect}"
+  
+#   # Temporary code to display params in the browser for inspection
+#   "Params: #{params.inspect}"
+# end
